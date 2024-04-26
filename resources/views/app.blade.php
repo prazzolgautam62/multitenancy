@@ -11,3 +11,7 @@
         @vite('resources/js/app.js')
     </body>
 </html>
+
+<script>
+    window.baseUrl = "{{url('/')}}";
+</script>
