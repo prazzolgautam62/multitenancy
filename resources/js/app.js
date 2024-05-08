@@ -8,6 +8,8 @@ import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import App from './components/utilities/App.vue';
 const app = createApp(App);
+import { pinia } from './store';
+app.use(pinia);
 app.use(router);
 app.use(ToastPlugin);
 app.mount('#app');

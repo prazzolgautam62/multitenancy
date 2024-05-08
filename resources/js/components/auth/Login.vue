@@ -1,9 +1,14 @@
 
 <script setup>
 import { _login } from "../../service/auth";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useUserStore } from '../../store/user';
 const form = ref({ email: "", password: "" });
 const submitting = ref(false);
+
+const userStore = useUserStore();
+const user = computed(() => userStore.getUser);
+
 const submitLogin = () =>{
     submitting.value = true;
     _login(form.value)
