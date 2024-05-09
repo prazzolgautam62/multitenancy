@@ -1,3 +1,3 @@
 <template>
-    Tenant Home
+  <div>Tenant Home</div>
 </template>

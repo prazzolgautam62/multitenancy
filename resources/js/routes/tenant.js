@@ -1,4 +1,4 @@
-import Home from '../components/main/Home.vue'
+import Home from '../components/tenant/Home.vue'
 
 const tenantRoutes = [
     {

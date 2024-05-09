@@ -15,6 +15,12 @@ export const useUserStore = defineStore({
     },
     isAuth(){
       return this.user != null && this.accessToken ? true : false;
+    },
+    typeAdmin(){
+      return this.user != null && this.user.tenant_id == null;
+    },
+    normalUser(){
+      return this.user && this.user.tenant_id;
     }
   },
   actions: {
