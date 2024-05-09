@@ -2,9 +2,11 @@
 <script setup>
 import { _login } from "../../service/auth";
 import { ref, computed } from "vue";
+import { useRouter } from 'vue-router';
 import { useUserStore } from '../../store/user';
 const form = ref({ email: "", password: "" });
 const submitting = ref(false);
+const router = useRouter();
 
 const userStore = useUserStore();
 const user = computed(() => userStore.getUser);
@@ -13,11 +15,21 @@ const submitLogin = () =>{
     submitting.value = true;
     _login(form.value)
         .then((response) => {
-          submitting.value = false;
-          console.log(response);
+          if(response.status){
+            submitting.value = false;
+            userStore.setUser(response.user);
+            userStore.setAccessToken(response.access_token);
+            router.push({
+              name: user.tenant_id ? "home" : "admin",
+            });
+          }
+          else{
+            console.log('error',response.message);
+            submitting.value = false;
+          }
         })
         .catch((err) => {
-          this.submitting = false;
+          submitting.value = false;
           console.log(err);
         });
 }

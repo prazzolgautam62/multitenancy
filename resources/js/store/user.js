@@ -13,6 +13,9 @@ export const useUserStore = defineStore({
     getAccessToken() {
       return this.accessToken;
     },
+    isAuth(){
+      return this.user != null && this.accessToken ? true : false;
+    }
   },
   actions: {
     setUser(user) {
