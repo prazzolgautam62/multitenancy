@@ -32,5 +32,11 @@ export const useUserStore = defineStore({
       this.accessToken = token;
       localStorage.setItem('ACCESS_TOKEN', token);
     },
+    resetUser(){
+      this.user= null;
+      this.accessToken = null;
+      localStorage.setItem('USER', null);
+      localStorage.setItem('ACCESS_TOKEN', null);
+    }
   },
 });

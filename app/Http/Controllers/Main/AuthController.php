@@ -71,4 +71,11 @@ class AuthController extends Controller
             ConvertDate::setConfiguration($configuration);
         }
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return successResponse('Logged out successfully !');
+    }
 }

@@ -1,11 +1,24 @@
 import axios from 'axios';
-axios.defaults.baseURL = `${window.baseUrl}/api` 
+import { useUserStore } from '../store/user';
+axios.defaults.baseURL = `${window.baseUrl}/api` ;
 
-function _login(data) {
+function getAccessToken() {
+    const userStore = useUserStore();
+    return userStore.getAccessToken;
+}
+
+async function _login(data) {
     const url = `login`
-    return axios.post(url, data).then(response => response.data)
+    return await axios.post(url, data).then(response => response.data)
+}
+
+async function _logout() {
+    return await axios.post('logout', {}, {
+        headers: { 'Authorization': getAccessToken() }
+    }).then(response => response.data)
 }
 
 export {
-    _login
+    _login,
+    _logout
 }
