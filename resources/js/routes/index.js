@@ -51,4 +51,8 @@ router.beforeEach((to, from, next)=>{
     return
 })
 
+router.afterEach((to, from) => {
+        document.title = 'Multitenancy - ' + to.meta.title;
+})
+
 export default router;
