@@ -14,20 +14,20 @@ const adminMenus = ref([
   {
     name: "tenants",
     displayName: "Tenants",
-    iconClass: "zmdi zmdi-grid",
+    iconClass: "zmdi zmdi-view-list",
     children: []
-  },
-  {
-    name: "app",
-    displayName: "App",
-    iconClass: "zmdi zmdi-apps",
-    children: [
-      {
-        name: "email",
-        displayName: "Email"
-      }
-    ]
   }
+  // {
+  //   name: "app",
+  //   displayName: "App",
+  //   iconClass: "zmdi zmdi-apps",
+  //   children: [
+  //     {
+  //       name: "email",
+  //       displayName: "Email"
+  //     }
+  //   ]
+  // }
 ]);
 const tenantMenus = ref([
   {
@@ -35,7 +35,7 @@ const tenantMenus = ref([
     displayName: "Dashboard",
     iconClass: "zmdi zmdi-home",
     children: []
-  },
+  }
 ]);
 </script>
 
@@ -59,7 +59,7 @@ const tenantMenus = ref([
             </a>
             <div class="detail">
               <h4>{{userStore.getUser.name}}</h4>
-              <small>Super Admin</small>
+              <small>{{userStore.getUser.role == 1 ? 'Super Admin' : 'Tenant'}}</small>
             </div>
           </div>
         </li>

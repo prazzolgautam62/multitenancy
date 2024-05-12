@@ -54,7 +54,7 @@ const logout = () => {
             <i class="zmdi zmdi-search"></i>
           </a>
         </li>
-        <li class="dropdown">
+        <!-- <li class="dropdown">
           <a
             href="javascript:void(0);"
             class="dropdown-toggle"
@@ -368,7 +368,7 @@ const logout = () => {
               </ul>
             </li>
           </ul>
-        </li>
+        </li> -->
         <li>
           <a href="javascript:void(0);" class="js-right-sidebar" title="Setting">
             <i class="zmdi zmdi-settings zmdi-hc-spin"></i>
