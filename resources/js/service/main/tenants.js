@@ -13,6 +13,13 @@ async function _getTenants() {
     }).then(response => response.data)
 }
 
+function _storeTenant(data) {
+    return axios.post('tenant', data, {
+        headers: { 'Authorization': getAccessToken() }
+    }).then(response => response.data)
+}
+
 export {
     _getTenants,
+    _storeTenant
 }

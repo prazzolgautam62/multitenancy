@@ -27,14 +27,13 @@ class StoreTenant extends FormRequest
     {
         return [
             'name' => ['required', 'string','max:191', 'unique:tenants,name'],
-            'api_key' => ['present', 'nullable', 'string', 'max:191', 'unique:tenants,api_key'],
             'address' => ['present', 'nullable', 'string', 'max:191'],
             'contact_no' => ['present', 'nullable', 'string', 'max:191'],
             'email' => ['required', 'string', 'max:191', 'unique:main.users,email'],
             'password' => ['required', 'string'],
             'url' => ['present', 'nullable', 'string', 'max:191'],
             'established_year' => ['present', 'nullable', 'string', 'max:191'],
-            'pan_no' => ['present', 'nullable', 'string', 'max:191'],
+            'pan_no' => ['present', 'nullable', 'numeric'],
         ];
     }
 

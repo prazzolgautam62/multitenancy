@@ -1,7 +1,22 @@
 <script setup>
-import { onMounted,ref } from 'vue';
-import { _getTenants } from "../../../service/main/tenants";
+import { onMounted, ref } from "vue";
+import Modal from "../../utilities/Modal.vue";
+import {useToast} from 'vue-toast-notification';
+import { _getTenants, _storeTenant } from "../../../service/main/tenants";
+const showModal = ref(false);
+const submitting = ref(false);
+const $toast = useToast();
 const tenants = ref([]);
+const form = ref({
+  name: "",
+  email: "",
+  password: "",
+  address: "",
+  contact_no: "",
+  url: "",
+  pan_no: "",
+  established_year: ""
+});
 const getAllTenants = () => {
   _getTenants()
     .then(response => {
@@ -16,10 +31,27 @@ const getAllTenants = () => {
     });
 };
 
-onMounted(() => {
-    getAllTenants();
-});
+const createTenant = () => {
+  submitting.value = true;
+  _storeTenant(form.value)
+    .then(response => {
+      if (response.status) {
+        submitting.value = false;
+        showModal.value = false;
+        $toast.success(response.message);
+        getAllTenants();
+      } else {
+        console.log("error", response.message);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
+onMounted(() => {
+  getAllTenants();
+});
 </script>
 
 <template>
@@ -50,11 +82,11 @@ onMounted(() => {
     <div class="row clearfix">
       <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="card">
-          <!-- <div class="header">
+          <div class="header">
             <h2>
-              <strong>Bordered</strong> Table
+              <strong @click="showModal = true" class="cursor-pointer">Add New Tenant</strong>
             </h2>
-          </div> -->
+          </div>
           <div class="body">
             <div class="table-responsive">
               <table class="table table-bordered table-hover">
@@ -74,8 +106,8 @@ onMounted(() => {
                     <td>{{tenant.email}}</td>
                     <td>{{tenant.contact_no}}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                      <button class="btn btn-primary btn-sm">Edit</button>
+                      <button class="btn btn-danger btn-sm">Delete</button>
                     </td>
                   </tr>
                 </tbody>
@@ -85,5 +117,120 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <Modal v-if="showModal" @close="showModal = false">
+      <template v-slot:header>
+        <h4 class="title" id="largeModalLabel">Add New Tenant</h4>
+      </template>
+      <template v-slot:body>
+        <form @submit.prevent="createTenant()">
+          <div class="form-group form-float">
+            <label for="email_address">Name</label>
+            <input
+              v-model="form.name"
+              type="text"
+              class="form-control"
+              placeholder="Name"
+              name="name"
+              required
+            />
+          </div>
+          <div class="row clearfix">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="email_address">Email Address</label>
+                <input
+                  v-model="form.email"
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  name="email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  v-model="form.password"
+                  id="password"
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  name="password"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row clearfix">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input
+                  v-model="form.address"
+                  type="text"
+                  id="address"
+                  class="form-control"
+                  placeholder="Address"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="contact">Contact</label>
+                <input
+                  v-model="form.contact_no"
+                  type="text"
+                  id="contact"
+                  class="form-control"
+                  placeholder="Contact"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row clearfix">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="url">URL</label>
+                <input
+                  v-model="form.url"
+                  type="text"
+                  id="url"
+                  class="form-control"
+                  placeholder="URL"
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="pan">PAN</label>
+                <input
+                  v-model="form.pan_no"
+                  type="number"
+                  id="pan"
+                  class="form-control"
+                  placeholder="PAN NO"
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="estd">ESTD</label>
+                <input
+                  v-model="form.established_year"
+                  type="text"
+                  id="estd"
+                  class="form-control"
+                  placeholder="ESTD"
+                />
+              </div>
+            </div>
+          </div>
+          <button :disabled="submitting" class="btn btn-raised btn-primary waves-effect" type="submit">{{ submitting ? 'CREATING...' : 'CREATE'}}</button>
+        </form>
+      </template>
+    </Modal>
   </div>
 </template>

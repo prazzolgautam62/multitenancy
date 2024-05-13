@@ -14,6 +14,9 @@
         li.menu-child.active a{
             color: #e47297 !important;
         }
+        .cursor-pointer{
+            cursor: pointer;
+        }
     </style>
     <title>Multitenancy</title>
     @vite('resources/css/app.css')

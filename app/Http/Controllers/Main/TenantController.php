@@ -19,9 +19,8 @@ class TenantController extends Controller
     public function store(StoreTenant $request){
         $input = $request->only([
             'name',
-            'api_key',
             'address',
-            'phone_nos',
+            'contact_no',
             'logo',
             'email',
             'url',
