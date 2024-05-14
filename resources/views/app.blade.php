@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="dashboard/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css" />
     <link rel="stylesheet" href="dashboard/assets/plugins/charts-c3/plugin.css" />
 
+    <link rel="icon" href="dashboard/assets/images/logo.svg" type="image/svg">
+
     <link rel="stylesheet" href="dashboard/assets/plugins/morrisjs/morris.min.css" />
     <link rel="stylesheet" href="dashboard/assets/css/style.min.css">
     <style>

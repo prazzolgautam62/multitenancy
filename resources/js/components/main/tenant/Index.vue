@@ -1,12 +1,14 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Modal from "../../utilities/Modal.vue";
-import {useToast} from 'vue-toast-notification';
-import { _getTenants, _storeTenant } from "../../../service/main/tenants";
+import { useToast } from "vue-toast-notification";
+import { _getTenants, _storeTenant, _updateTenant } from "../../../service/main/tenants";
+const editMode = ref(false);
 const showModal = ref(false);
 const submitting = ref(false);
 const $toast = useToast();
 const tenants = ref([]);
+const editDataId = ref(null);
 const form = ref({
   name: "",
   email: "",
@@ -31,22 +33,60 @@ const getAllTenants = () => {
     });
 };
 
-const createTenant = () => {
+const openEditMode = tenant => {
+  showModal.value = true;
+  editMode.value = true;
+  editDataId.value = tenant.id;
+  form.value = tenant;
+};
+
+const openAddMode = () => {
+  showModal.value = true;
+  editMode.value = false;
+  editDataId.value = null;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  editMode.value = false;
+  editDataId.value = null;
+  form.value = {};
+};
+
+const submitForm = () => {
   submitting.value = true;
-  _storeTenant(form.value)
-    .then(response => {
-      if (response.status) {
-        submitting.value = false;
-        showModal.value = false;
-        $toast.success(response.message);
-        getAllTenants();
-      } else {
-        console.log("error", response.message);
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  if (!editMode.value) {
+    _storeTenant(form.value)
+      .then(response => {
+        if (response.status) {
+          submitting.value = false;
+          showModal.value = false;
+          $toast.success(response.message);
+          getAllTenants();
+        } else {
+          console.log("error", response.message);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+  else{
+     _updateTenant(editDataId.value,form.value)
+      .then(response => {
+        if (response.status) {
+          submitting.value = false;
+          showModal.value = false;
+          $toast.success(response.message);
+          getAllTenants();
+        } else {
+          console.log("error", response.message);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 
 onMounted(() => {
@@ -84,7 +124,7 @@ onMounted(() => {
         <div class="card">
           <div class="header">
             <h2>
-              <strong @click="showModal = true" class="cursor-pointer">Add New Tenant</strong>
+              <strong @click="openAddMode()" class="cursor-pointer">Add New Tenant</strong>
             </h2>
           </div>
           <div class="body">
@@ -106,7 +146,7 @@ onMounted(() => {
                     <td>{{tenant.email}}</td>
                     <td>{{tenant.contact_no}}</td>
                     <td>
-                      <button class="btn btn-primary btn-sm">Edit</button>
+                      <button class="btn btn-primary btn-sm" @click="openEditMode(tenant)">Edit</button>
                       <button class="btn btn-danger btn-sm">Delete</button>
                     </td>
                   </tr>
@@ -117,12 +157,12 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <Modal v-if="showModal" @close="showModal = false">
+    <Modal v-if="showModal" @close="closeModal()">
       <template v-slot:header>
-        <h4 class="title" id="largeModalLabel">Add New Tenant</h4>
+        <h4 class="title" id="largeModalLabel">{{ editMode ? 'Update' : 'Add New'}} Tenant</h4>
       </template>
       <template v-slot:body>
-        <form @submit.prevent="createTenant()">
+        <form @submit.prevent="submitForm()">
           <div class="form-group form-float">
             <label for="email_address">Name</label>
             <input
@@ -158,7 +198,8 @@ onMounted(() => {
                   class="form-control"
                   placeholder="Password"
                   name="password"
-                  required
+                  :disabled="editMode"
+                  :required="!editMode"
                 />
               </div>
             </div>
@@ -228,7 +269,18 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <button :disabled="submitting" class="btn btn-raised btn-primary waves-effect" type="submit">{{ submitting ? 'CREATING...' : 'CREATE'}}</button>
+          <button
+            v-if="!editMode"
+            :disabled="submitting"
+            class="btn btn-raised btn-primary waves-effect"
+            type="submit"
+          >{{ submitting ? 'CREATING...' : 'CREATE'}}</button>
+          <button
+            v-else
+            :disabled="submitting"
+            class="btn btn-raised btn-primary waves-effect"
+            type="submit"
+          >{{ submitting ? 'UPDATING...' : 'UPDATE'}}</button>
         </form>
       </template>
     </Modal>

@@ -19,7 +19,14 @@ function _storeTenant(data) {
     }).then(response => response.data)
 }
 
+function _updateTenant(id,data) {
+    return axios.put(`tenant/${id}`, data, {
+        headers: { 'Authorization': getAccessToken() }
+    }).then(response => response.data)
+}
+
 export {
     _getTenants,
-    _storeTenant
+    _storeTenant,
+    _updateTenant
 }

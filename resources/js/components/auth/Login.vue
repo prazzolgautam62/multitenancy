@@ -3,13 +3,14 @@
 import { _login } from "../../service/auth";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import {useToast} from 'vue-toast-notification';
 import { useUserStore } from "../../store/user";
 const form = ref({ email: "", password: "" });
 const submitting = ref(false);
 const router = useRouter();
+const $toast = useToast();
 
 const userStore = useUserStore();
-const user = computed(() => userStore.getUser);
 
 const submitLogin = () => {
   submitting.value = true;
@@ -19,11 +20,16 @@ const submitLogin = () => {
         submitting.value = false;
         userStore.setUser(response.user);
         userStore.setAccessToken(response.access_token);
+        // router.push({
+        //   name: user.tenant_id ? "home" : "admin"
+        // });
         router.push({
-          name: user.tenant_id ? "home" : "admin"
-        });
+          name: response.user.tenant_id ? "home" : "admin"
+        }).then(() => {
+          window.location.reload()
+        })
       } else {
-        console.log("error", response.message);
+        $toast.error(response.message);
         submitting.value = false;
       }
     })

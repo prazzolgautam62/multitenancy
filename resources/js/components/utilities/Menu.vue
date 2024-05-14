@@ -35,6 +35,12 @@ const tenantMenus = ref([
     displayName: "Dashboard",
     iconClass: "zmdi zmdi-home",
     children: []
+  },
+   {
+    name: "configuration",
+    displayName: "Configuration",
+    iconClass: "zmdi zmdi-settings",
+    children: []
   }
 ]);
 </script>

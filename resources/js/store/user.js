@@ -10,6 +10,9 @@ export const useUserStore = defineStore({
     getUser() {
       return this.user;
     },
+    getConfiguration() {
+      return this.user ? (this.user.tenant ? this.user.tenant.configuration : {}) : {};
+    },
     getAccessToken() {
       return this.accessToken;
     },

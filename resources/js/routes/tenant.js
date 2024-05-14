@@ -1,4 +1,5 @@
 import Home from '../components/tenant/Home.vue'
+import Configuration from '../components/tenant/Configuration.vue'
 
 const tenantRoutes = [
     {
@@ -7,6 +8,15 @@ const tenantRoutes = [
         component: Home,
         meta: {
             title: "Home",
+            permission: ""
+        }
+    },
+    {
+        path: "/configuration",
+        name: "configuration",
+        component: Configuration,
+        meta: {
+            title: "Configuration",
             permission: ""
         }
     },
