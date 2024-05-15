@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTenant;
 use App\Models\Main\Tenant;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class TenantController extends Controller
@@ -66,5 +68,15 @@ class TenantController extends Controller
         } catch (Throwable $e) {
             return response()->json(['status' => false, 'message' => "failed ! {$e->getMessage()}"]);
         }
+    }
+
+    public function destroy($id)
+    {
+        $tenant = Tenant::find($id);
+        $tenant->makeVisible('database_name');
+        deleteDatabase($tenant->database_name);
+        User::where('tenant_id', $tenant->id)->delete();
+        $tenant->delete();
+        return successResponse('Tenant deleted successfully !');
     }
 }

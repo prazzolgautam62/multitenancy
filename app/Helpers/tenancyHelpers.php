@@ -76,15 +76,11 @@ if(!function_exists('checkDatabaseExists'))
     }
 }
 
-if(!function_exists('deleteDatabase'))
-{
-	function deleteDatabase($database_name)
-	{
-        $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME =  ?";
-        $database = DB::select($query, [$database_name]);
-        if(!empty($database)){
-            DB::statement('DROP DATABASE ' . $database_name);
-        }
-
-	}
+if (!function_exists('deleteDatabase')) {
+    function deleteDatabase($database_name) {
+        $query = "DROP DATABASE IF EXISTS $database_name";
+        
+        // Execute the drop database query
+        DB::statement($query);
+    }
 }

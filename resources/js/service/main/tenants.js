@@ -25,8 +25,15 @@ function _updateTenant(id,data) {
     }).then(response => response.data)
 }
 
+function _deleteTenant(id) {
+    return axios.delete(`tenant/${id}`, {
+        headers: { 'Authorization': getAccessToken() }
+    }).then(response => response.data)
+}
+
 export {
     _getTenants,
     _storeTenant,
-    _updateTenant
+    _updateTenant,
+    _deleteTenant
 }

@@ -2,7 +2,12 @@
 import { onMounted, ref } from "vue";
 import Modal from "../../utilities/Modal.vue";
 import { useToast } from "vue-toast-notification";
-import { _getTenants, _storeTenant, _updateTenant } from "../../../service/main/tenants";
+import {
+  _getTenants,
+  _storeTenant,
+  _updateTenant,
+  _deleteTenant
+} from "../../../service/main/tenants";
 const editMode = ref(false);
 const showModal = ref(false);
 const submitting = ref(false);
@@ -24,6 +29,23 @@ const getAllTenants = () => {
     .then(response => {
       if (response.status) {
         tenants.value = response.data.tenants;
+      } else {
+        console.log("error", response.message);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+const deleteTenant = id => {
+  if(!confirm('Are you sure you want to delete the tenant ?'))
+    return;
+  _deleteTenant(id)
+    .then(response => {
+      if (response.status) {
+        $toast.success(response.message);
+        getAllTenants();
       } else {
         console.log("error", response.message);
       }
@@ -61,6 +83,7 @@ const submitForm = () => {
         if (response.status) {
           submitting.value = false;
           showModal.value = false;
+          form.value = {};
           $toast.success(response.message);
           getAllTenants();
         } else {
@@ -70,13 +93,13 @@ const submitForm = () => {
       .catch(err => {
         console.log(err);
       });
-  }
-  else{
-     _updateTenant(editDataId.value,form.value)
+  } else {
+    _updateTenant(editDataId.value, form.value)
       .then(response => {
         if (response.status) {
           submitting.value = false;
           showModal.value = false;
+          form.value = {};
           $toast.success(response.message);
           getAllTenants();
         } else {
@@ -136,6 +159,7 @@ onMounted(() => {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Contact</th>
+                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -145,9 +169,10 @@ onMounted(() => {
                     <td>{{tenant.name}}</td>
                     <td>{{tenant.email}}</td>
                     <td>{{tenant.contact_no}}</td>
+                    <td>{{tenant.status}}</td>
                     <td>
                       <button class="btn btn-primary btn-sm" @click="openEditMode(tenant)">Edit</button>
-                      <button class="btn btn-danger btn-sm">Delete</button>
+                      <button class="btn btn-danger btn-sm" @click="deleteTenant(tenant.id)">Delete</button>
                     </td>
                   </tr>
                 </tbody>

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->string('established_year')->nullable();
             $table->string('pan_no')->nullable();
+            $table->boolean('status')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
