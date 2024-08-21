@@ -59,7 +59,7 @@ const openEditMode = tenant => {
   showModal.value = true;
   editMode.value = true;
   editDataId.value = tenant.id;
-  form.value = tenant;
+  form.value = {...tenant};
 };
 
 const openAddMode = () => {
