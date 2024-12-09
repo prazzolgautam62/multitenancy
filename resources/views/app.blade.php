@@ -21,7 +21,7 @@
         }
     </style>
     <title>Multitenancy</title>
-    @vite('resources/css/app.css')
+    @vite('resources/sass/app.scss')
 </head>
 
 <body>
@@ -43,4 +43,9 @@
 <script src="dashboard/assets/js/pages/index.js"></script>
 <script>
     window.baseUrl = "{{url('/')}}";
+    const theme = 'light';
+    const storedTheme = localStorage.getItem('THEME');
+    if(storedTheme == 'dark'){
+        document.body.classList.add('theme-dark');
+    }
 </script>

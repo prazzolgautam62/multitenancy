@@ -1,10 +1,18 @@
 <script setup>
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, watch} from 'vue';
+import { useUserStore } from "../../store/user";
+const selectedTheme = ref('light');
 const myDiv = ref(null);
+const userStore = useUserStore();
 
 const baseUrl = window.baseUrl;
 
+ watch(selectedTheme, (newTheme) => {
+      userStore.setTheme(newTheme);
+  });
+
 onMounted(() => {
+  selectedTheme.value = userStore.getTheme;
   setTimeout(() => {
     const div = myDiv.value;
     if (div) {
@@ -34,11 +42,11 @@ onMounted(() => {
               <h6>Theme Option</h6>
               <div class="light_dark">
                 <div class="radio">
-                  <input type="radio" name="radio1" id="lighttheme" value="light" checked />
+                  <input type="radio" name="radio1" id="lighttheme" value="light" v-model="selectedTheme" />
                   <label for="lighttheme">Light Mode</label>
                 </div>
                 <div class="radio mb-0">
-                  <input type="radio" name="radio1" id="darktheme" value="dark" />
+                  <input type="radio" name="radio1" id="darktheme" value="dark" v-model="selectedTheme" />
                   <label for="darktheme">Dark Mode</label>
                 </div>
               </div>

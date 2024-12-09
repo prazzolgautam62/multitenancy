@@ -1,0 +1,13 @@
+.theme-dark {
+    .modal {
+        .modal-content {
+            background-color: #1a1a1a !important;
+        }
+        input{
+            color: #c0c0c0;
+        }
+        input:disabled{
+            background-color: #464646;
+        }
+    }
+}

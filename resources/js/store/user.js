@@ -5,6 +5,7 @@ export const useUserStore = defineStore({
   state: () => ({
     user: JSON.parse(localStorage.getItem('USER')) || null,
     accessToken: localStorage.getItem('ACCESS_TOKEN') || null,
+    theme: localStorage.getItem('THEME') || 'light',
   }),
   getters: {
     getUser() {
@@ -15,6 +16,9 @@ export const useUserStore = defineStore({
     },
     getAccessToken() {
       return this.accessToken;
+    },
+    getTheme(){
+      return this.theme;
     },
     isAuth(){
       return this.user != null && this.accessToken ? true : false;
@@ -35,11 +39,17 @@ export const useUserStore = defineStore({
       this.accessToken = token;
       localStorage.setItem('ACCESS_TOKEN', token);
     },
+    setTheme(theme){
+      this.theme = theme;
+      localStorage.setItem('THEME',theme);
+    },
     resetUser(){
       this.user= null;
       this.accessToken = null;
+      this.theme = 'light';
       localStorage.setItem('USER', null);
       localStorage.setItem('ACCESS_TOKEN', null);
+      localStorage.setItem('THEME', 'light');
     }
   },
 });
